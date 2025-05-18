@@ -1,18 +1,27 @@
 from django.core.management.base import BaseCommand
-from events.models import DailyMetric
-from datetime import date, timedelta
+from events.models import Event
+from datetime import datetime, timedelta
 import random
 
 
 class Command(BaseCommand):
-    help = "Generate fake DailyMetric data for testing"
+    help = "Generate fake Event data for the last 30 days"
 
     def handle(self, *args, **kwargs):
-        base = date.today()
-        DailyMetric.objects.all().delete()
-        for i in range(30):
-            d = base - timedelta(days=i)
-            dau = random.randint(5, 50)
-            avg = round(random.uniform(1.5, 4.5), 2)
-            DailyMetric.objects.create(date=d, dau=dau, avg_events_per_user=avg)
-        self.stdout.write(self.style.SUCCESS("✅ Fake metrics generated"))
+        Event.objects.all().delete()
+        base = datetime.now()
+
+        user_ids = [f"user_{i}" for i in range(1, 11)]  # 10 fake users
+
+        for day in range(30):
+            date = base - timedelta(days=day)
+            for _ in range(random.randint(5, 20)):  # 5–20 events per day
+                Event.objects.create(
+                    timestamp=date.replace(
+                        hour=random.randint(0, 23), minute=random.randint(0, 59)
+                    ),
+                    user_id=random.choice(user_ids),
+                    event_type=random.choice(["login", "view", "click", "purchase"]),
+                )
+
+        self.stdout.write(self.style.SUCCESS("✅ 30 days of fake events generated."))
