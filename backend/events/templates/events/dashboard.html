@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Daily Metrics Dashboard</title>
+</head>
+<body>
+    <h1>Daily Metrics (Last 30 Days)</h1>
+    <table border="1">
+        <tr>
+            <th>Date</th>
+            <th>DAU</th>
+            <th>Avg Events per User</th>
+        </tr>
+        {% for metric in metrics %}
+        <tr>
+            <td>{{ metric.date }}</td>
+            <td>{{ metric.dau }}</td>
+            <td>{{ metric.avg_events_per_user|floatformat:2 }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
