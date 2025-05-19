@@ -1,8 +1,6 @@
 name: Run Django Tests
 
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
 
@@ -20,7 +18,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready"
+          --health-cmd pg_isready
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -31,11 +29,14 @@ jobs:
       POSTGRES_PASSWORD: test_pass
 
     steps:
-      - name: Checkout Code
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up Docker Compose
-        run: docker-compose -f docker-compose.yml build web
+        run: docker compose -f docker-compose.yml build web
 
-      - name: Run Tests
-        run: docker-compose -f docker-compose.yml run --rm web python manage.py test
+      - name: Run Django + Airflow tests
+        run: docker compose -f docker-compose.yml run --rm web python manage.py test
+
+      - name: Run Black code style check
+        run: docker compose -f docker-compose.yml run --rm web black --check .
