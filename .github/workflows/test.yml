@@ -43,7 +43,7 @@ jobs:
         run: docker compose -f docker-compose.yml build web
 
       - name: Run Django + Airflow tests
-        run: docker compose -f docker-compose.yml run --rm web sh -c "python manage.py test"
+        run: docker compose -f docker-compose.yml run --rm --entrypoint "python manage.py test" web
 
       - name: Remove .env
         run: rm .env
