@@ -126,6 +126,15 @@ docker-compose exec web python manage.py test
 └── README.md
 ```
 
+## 🖼️ Screenshots
+### Django Metrics Dashboard
+![Dashboard](images/dashboard.png)
+![Table](images/dashboard_table.png)
+
+### Airflow DAG
+![Airflow DAG](images/airflow_dag.png)
+
+
 ## 💬 Notes
 * You should not commit your .env file. Rather use the example to create one locally (it will be ignored by .gitignore)
 * Static files are collected to staticfiles/ using:
