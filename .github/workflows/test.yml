@@ -43,8 +43,8 @@ jobs:
         run: docker compose -f docker-compose.yml build web
 
       - name: Run Django + Airflow tests
-        run: docker compose -f docker-compose.yml up --abort-on-container-exit --exit-code-from web web
-
+        run: |
+          docker compose -f docker-compose.yml -f docker-compose.ci.yml up --abort-on-container-exit --exit-code-from web
 
       - name: Remove .env
         run: rm .env
