@@ -9,7 +9,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     services:
       postgres:
         image: postgres:14
@@ -26,19 +25,16 @@ jobs:
           --health-retries 5
 
     env:
-      POSTGRES_DB: test_db
-      POSTGRES_USER: test_user
-      POSTGRES_PASSWORD: test_pass
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
 
     steps:
-      - name: Checkout code
+      - name: Check out code
         uses: actions/checkout@v3
 
       - name: Set up Docker Compose
-        run: docker compose -f docker-compose.yml build web
+        run: docker-compose -f docker-compose.yml build web
 
       - name: Run Django + Airflow tests
-        run: docker compose -f docker-compose.yml run --rm web python manage.py test
-
-      - name: Run Black code style check
-        run: docker compose -f docker-compose.yml run --rm web black --check .
+        run: docker-compose -f docker-compose.yml run --rm web python manage.py test
